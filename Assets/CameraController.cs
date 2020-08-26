@@ -5,8 +5,8 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     // Start is called before the first frame update
-   
-    public Transform player;
+   [SerializeField]
+    private Transform player;
     void Update()
     {
         transform.position = new Vector3(player.position.x, player.position.y,-10); 
