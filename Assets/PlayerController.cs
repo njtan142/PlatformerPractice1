@@ -1,61 +1,70 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Animator anim;
-
+    private Collider2D coll;
+    [SerializeField]
+    private LayerMask ground;
+    private enum States { Onground, Running, Jumping, Falling};
+    private States currentState = States.Onground; 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        coll = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (Input.GetKey(KeyCode.A))
+        float dy = Input.GetAxis("Horizontal");
+        float dx = Input.GetAxis("Vertical");
+        if (dy < 0)
         {
             rb.velocity = new Vector2(-5, rb.velocity.y);
             transform.localScale = new Vector2(-1, 1);
-            anim.SetBool("Running", true);
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (dy > 0)
         {
             rb.velocity = new Vector2(5, rb.velocity.y);
             transform.localScale = new Vector2(1, 1);
-            anim.SetBool("Running", true);
         }
-        else
-        {
-            anim.SetBool("Running", false);
-        }
-        if (Input.GetKeyDown(KeyCode.Space) && rb.velocity.y == 0)
+        if (dx > 0 && coll.IsTouchingLayers(ground))
         {
             rb.velocity = new Vector2(rb.velocity.x, 7);
-            anim.SetBool("Jumping", true);
         }
-        if(rb.velocity.y < 0)
+        StateSwitch();
+    }
+
+    private void StateSwitch()
+    {   
+        if (rb.velocity.y > 0)
         {
-            anim.SetBool("Jumping", false);
-            anim.SetBool("Falling", true);
+            currentState = States.Jumping;
+        }
+        else if (rb.velocity.y < 0)
+        {
+            currentState = States.Falling;
         }
         else
         {
-            anim.SetBool("Falling", false);
+            currentState = States.Onground;
         }
 
-        if (rb.velocity.y == 0)
+        if (rb.velocity.x != 0 && rb.velocity.y == 0)
         {
-            anim.SetBool("Onground", true);
+            currentState = States.Running;
         }
-        else
+        else if(rb.velocity.y == 0)
         {
-            anim.SetBool("Onground", false);
-
+            currentState = States.Onground;
         }
-        Debug.Log(rb.velocity.y);
+        Debug.Log(currentState);
+        anim.SetInteger("currentState", (int)currentState);
     }
 }

@@ -15572,7 +15572,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -15656,6 +15656,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eea9e9f94c4a7a4c8cc373f4f6ed7ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ground:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!95 &184205660
 Animator:
   serializedVersion: 3
@@ -15831,7 +15834,7 @@ GameObject:
   - component: {fileID: 1882484848}
   - component: {fileID: 1882484850}
   - component: {fileID: 1882484849}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Foreground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17493,7 +17496,7 @@ CompositeCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_GeometryType: 1
+  m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
   m_ColliderPaths:
@@ -17647,30 +17650,6 @@ CompositeCollider2D:
         Y: -130000000
       - X: 130000000
         Y: -130000000
-    - - X: -109999900
-        Y: -20000041
-      - X: -109999900
-        Y: -9999959
-      - X: -109999959
-        Y: -9999900
-      - X: -160000041
-        Y: -9999900
-      - X: -160000100
-        Y: -9999959
-      - X: -160000100
-        Y: -20000041
-      - X: -160000041
-        Y: -20000100
-      - X: -109999959
-        Y: -20000100
-    - - X: 170000000
-        Y: -10000000
-      - X: 100000000
-        Y: -10000000
-      - X: 100000000
-        Y: -50000000
-      - X: 170000000
-        Y: -50000000
     - - X: 70000000
         Y: -10000000
       - X: -70000000
@@ -17678,6 +17657,22 @@ CompositeCollider2D:
       - X: -70000000
         Y: -50000000
       - X: 70000000
+        Y: -50000000
+    - - X: -110000000
+        Y: -10000000
+      - X: -160000000
+        Y: -10000000
+      - X: -160000000
+        Y: -20000000
+      - X: -110000000
+        Y: -20000000
+    - - X: 170000000
+        Y: -10000000
+      - X: 100000000
+        Y: -10000000
+      - X: 100000000
+        Y: -50000000
+      - X: 170000000
         Y: -50000000
     - - X: 230000000
         Y: -20000000
@@ -17779,22 +17774,18 @@ CompositeCollider2D:
       - {x: 1, y: -12}
       - {x: 1, y: -13}
       - {x: 13, y: -13}
-    - - {x: -10.99999, y: -2.000004}
-      - {x: -10.99999, y: -0.9999959}
-      - {x: -10.999996, y: -0.99999}
-      - {x: -16.000006, y: -0.99999}
-      - {x: -16.00001, y: -0.9999959}
-      - {x: -16.00001, y: -2.000004}
-      - {x: -16.000006, y: -2.00001}
-      - {x: -10.999996, y: -2.00001}
-    - - {x: 17, y: -1}
-      - {x: 10, y: -1}
-      - {x: 10, y: -5}
-      - {x: 17, y: -5}
     - - {x: 7, y: -1}
       - {x: -7, y: -1}
       - {x: -7, y: -5}
       - {x: 7, y: -5}
+    - - {x: -11, y: -1}
+      - {x: -16, y: -1}
+      - {x: -16, y: -2}
+      - {x: -11, y: -2}
+    - - {x: 17, y: -1}
+      - {x: 10, y: -1}
+      - {x: 10, y: -5}
+      - {x: 17, y: -5}
     - - {x: 23, y: -2}
       - {x: 19, y: -2}
       - {x: 19, y: -3}
