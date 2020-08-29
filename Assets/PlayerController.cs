@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     private Collider2D coll;
     [SerializeField]
     private LayerMask ground;
+    [SerializeField]
+    private float speed = 5f,
+                  jumpForce = 10f;
     private enum States { Onground, Running, Jumping, Falling};
     private States currentState = States.Onground; 
     private void Start()
@@ -26,17 +29,17 @@ public class PlayerController : MonoBehaviour
         float dx = Input.GetAxis("Vertical");
         if (dy < 0)
         {
-            rb.velocity = new Vector2(-5, rb.velocity.y);
+            rb.velocity = new Vector2(-speed, rb.velocity.y);
             transform.localScale = new Vector2(-1, 1);
         }
         else if (dy > 0)
         {
-            rb.velocity = new Vector2(5, rb.velocity.y);
+            rb.velocity = new Vector2(speed, rb.velocity.y);
             transform.localScale = new Vector2(1, 1);
         }
         if (dx > 0 && coll.IsTouchingLayers(ground))
         {
-            rb.velocity = new Vector2(rb.velocity.x, 7);
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
         StateSwitch();
     }

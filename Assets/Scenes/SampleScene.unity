@@ -15572,7 +15572,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 1
+  m_LinearDrag: 3
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -15659,6 +15659,8 @@ MonoBehaviour:
   ground:
     serializedVersion: 2
     m_Bits: 256
+  speed: 5
+  jumpForce: 10
 --- !u!95 &184205660
 Animator:
   serializedVersion: 3
