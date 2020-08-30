@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 
     /***********************************************************************/
     private int cherries = 0;
-    private enum States { Onground, Running, Jumping, Falling };
+    private enum States { Onground, Running, Jumping, Falling, Hurt };
     private States currentState = States.Onground;
 
 
@@ -38,7 +38,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        Movement();
+        if (currentState != States.Hurt)
+        {
+            Movement();
+        }
+        StateSwitch();
     }
 
 
@@ -51,6 +55,29 @@ public class PlayerController : MonoBehaviour
             Destroy(collision.gameObject);
             cherries++;
             CherryCount.text = cherries.ToString();
+        }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            if (currentState == States.Falling)
+            {
+                Destroy(collision.gameObject);
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            }
+            else
+            {
+                currentState = States.Hurt;
+                if (collision.transform.position.x > transform.position.x)
+                {
+                    rb.velocity = new Vector2(-speed, jumpForce / 2);
+                }
+                else
+                {
+                    rb.velocity = new Vector2(speed, jumpForce / 2);
+                }
+            }
         }
     }
     private void Movement()
@@ -71,36 +98,44 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
-        StateSwitch();
     }
 
     private void StateSwitch()
     {
-       
-        if (rb.velocity.y > 0)
+        if (currentState != States.Hurt)
         {
-            currentState = States.Jumping;
-        }
-        else if (rb.velocity.y < 0)
-        {
-            currentState = States.Falling;
-        }
-        else if (System.Math.Abs(rb.velocity.x) < 1)
-        {
-            currentState = States.Onground;
-        }
+            if (rb.velocity.y > 0)
+            {
+                currentState = States.Jumping;
+            }
+            else if (rb.velocity.y < 0)
+            {
+                currentState = States.Falling;
+            }
+            else if (System.Math.Abs(rb.velocity.x) < 1)
+            {
+                currentState = States.Onground;
+            }
 
-        if (System.Math.Abs(rb.velocity.x) < 1 && rb.velocity.y == 0)
-        {
-            currentState = States.Onground;
+            if (System.Math.Abs(rb.velocity.x) < 1 && rb.velocity.y == 0)
+            {
+                currentState = States.Onground;
+            }
+            else if (rb.velocity.x != 0 && rb.velocity.y == 0)
+            {
+                currentState = States.Running;
+            }
+            else if (rb.velocity.y == 0)
+            {
+                currentState = States.Onground;
+            }
         }
-        else if (rb.velocity.x != 0 && rb.velocity.y == 0)
+        else
         {
-            currentState = States.Running;
-        }
-        else if (rb.velocity.y == 0)
-        {
-            currentState = States.Onground;
+            if (System.Math.Abs(rb.velocity.x) < 1)
+            {
+                currentState = States.Onground;
+            }
         }
         anim.SetInteger("currentState", (int)currentState);
     }
