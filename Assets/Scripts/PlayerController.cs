@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    /***********************************************************************/
     private Rigidbody2D rb;
     private Animator anim;
     private Collider2D coll;
@@ -13,17 +14,42 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float speed = 5f,
                   jumpForce = 10f;
+
+
+    /***********************************************************************/
+    public int cherries = 0;
     private enum States { Onground, Running, Jumping, Falling};
-    private States currentState = States.Onground; 
+    private States currentState = States.Onground;
+
+
+    /***********************************************************************/
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
+        /***********************************************************************/
+        /***********************************************************************/
     }
 
     // Update is called once per frame
     private void Update()
+    {
+        Movement();
+    }
+
+
+
+    /***********************************************************************/
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Collectible")
+        {
+            Destroy(collision.gameObject);
+            cherries++;
+        }
+    }
+    private void Movement()
     {
         float dy = Input.GetAxis("Horizontal");
         float dx = Input.GetAxis("Vertical");
