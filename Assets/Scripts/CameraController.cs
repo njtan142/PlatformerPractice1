@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
     // Start is called before the first frame update
-   [SerializeField]
+    [SerializeField]
     private Transform player;
     void Update()
     {
-        transform.position = new Vector3(player.position.x, player.position.y,-10); 
+        transform.position = new Vector3(player.position.x, player.position.y, -10);
     }
 }

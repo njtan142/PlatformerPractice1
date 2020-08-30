@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,16 +7,21 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
     private Collider2D coll;
+
+
+
     [SerializeField]
     private LayerMask ground;
     [SerializeField]
     private float speed = 5f,
                   jumpForce = 10f;
+    [SerializeField]
+    private Text CherryCount;
 
 
     /***********************************************************************/
-    public int cherries = 0;
-    private enum States { Onground, Running, Jumping, Falling};
+    private int cherries = 0;
+    private enum States { Onground, Running, Jumping, Falling };
     private States currentState = States.Onground;
 
 
@@ -43,10 +46,11 @@ public class PlayerController : MonoBehaviour
     /***********************************************************************/
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Collectible")
+        if (collision.tag == "Collectible")
         {
             Destroy(collision.gameObject);
             cherries++;
+            CherryCount.text = cherries.ToString();
         }
     }
     private void Movement()
@@ -71,7 +75,8 @@ public class PlayerController : MonoBehaviour
     }
 
     private void StateSwitch()
-    {   
+    {
+       
         if (rb.velocity.y > 0)
         {
             currentState = States.Jumping;
@@ -80,20 +85,23 @@ public class PlayerController : MonoBehaviour
         {
             currentState = States.Falling;
         }
-        else
+        else if (System.Math.Abs(rb.velocity.x) < 1)
         {
             currentState = States.Onground;
         }
 
-        if (rb.velocity.x != 0 && rb.velocity.y == 0)
-        {
-            currentState = States.Running;
-        }
-        else if(rb.velocity.y == 0)
+        if (System.Math.Abs(rb.velocity.x) < 1 && rb.velocity.y == 0)
         {
             currentState = States.Onground;
         }
-        Debug.Log(currentState);
+        else if (rb.velocity.x != 0 && rb.velocity.y == 0)
+        {
+            currentState = States.Running;
+        }
+        else if (rb.velocity.y == 0)
+        {
+            currentState = States.Onground;
+        }
         anim.SetInteger("currentState", (int)currentState);
     }
 }

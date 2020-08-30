@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Collectible
   layers:
   - Default
   - TransparentFX
@@ -49,4 +50,7 @@ TagManager:
     locked: 0
   - name: Entity
     uniqueID: 1536173001
+    locked: 0
+  - name: Collectible
+    uniqueID: 674997657
     locked: 0
