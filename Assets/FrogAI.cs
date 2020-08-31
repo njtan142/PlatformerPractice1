@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class FrogAI : MonoBehaviour
@@ -13,7 +14,9 @@ public class FrogAI : MonoBehaviour
                 jumpForce = 3;
     private bool IsFacingLeft = true;
     [SerializeField]
-    private LayerMask ground;
+    private LayerMask ground,
+                      enemy;
+
     private void Start()
     {
         frogBody = GetComponent<Rigidbody2D>();
@@ -29,7 +32,7 @@ public class FrogAI : MonoBehaviour
     {
         if (IsFacingLeft)
         {
-            if (frogBody.velocity.y == 0)
+            if (frogBody.velocity.y == 0 )
             {
                 frogBody.velocity = new Vector2(speed, jumpForce);
                 transform.localScale = new Vector2(-1, 1);
@@ -37,11 +40,25 @@ public class FrogAI : MonoBehaviour
         }
         else
         {
-            if (frogBody.velocity.y == 0)
+            if (frogBody.velocity.y == 0 )
             {
                 frogBody.velocity = new Vector2(-speed, jumpForce);
                 transform.localScale = new Vector2(1, 1);
             }
+        }
+        if (coll.IsTouchingLayers(enemy))
+        {
+            if (IsFacingLeft)
+            {
+                    frogBody.velocity = new Vector2(speed, frogBody.velocity.y);
+                    transform.localScale = new Vector2(-1, 1);
+            }
+            else
+            {
+                    frogBody.velocity = new Vector2(-speed, frogBody.velocity.y);
+                    transform.localScale = new Vector2(1, 1);
+            }
+
         }
     }
 
@@ -92,5 +109,12 @@ public class FrogAI : MonoBehaviour
             }
         }
     }
-
+    public void JumpedOn()
+    {
+        anim.SetTrigger("Death");
+    }
+    public void Death()
+    {
+        Destroy(this.gameObject);
+    }
 }

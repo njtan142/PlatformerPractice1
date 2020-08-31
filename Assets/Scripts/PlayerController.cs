@@ -16,11 +16,13 @@ public class PlayerController : MonoBehaviour
     private float speed = 5f,
                   jumpForce = 10f;
     [SerializeField]
-    private Text CherryCount;
+    private Text CherryCount,
+                 EnemiesKilledCount;
 
 
     /***********************************************************************/
     private int cherries = 0;
+    private int enemiesKilled = 0;
     private enum States { Onground, Running, Jumping, Falling, Hurt };
     private States currentState = States.Onground;
 
@@ -61,10 +63,13 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
+            FrogAI frog = collision.gameObject.GetComponent<FrogAI>();
             if (currentState == States.Falling)
             {
-                Destroy(collision.gameObject);
+                frog.JumpedOn();
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                enemiesKilled++;
+                EnemiesKilledCount.text = enemiesKilled.ToString();
             }
             else
             {
