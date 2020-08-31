@@ -7,7 +7,7 @@ public class FrogAI : MonoBehaviour
     private Collider2D coll;
     private Animator anim;
     private enum States { Idle, Jumping, Falling };
-    private States currentStates = States.Idle;
+    private States currentState = States.Idle;
     [SerializeField]
     private int speed = 2,
                 jumpForce = 3;
@@ -21,6 +21,11 @@ public class FrogAI : MonoBehaviour
         anim = GetComponent<Animator>();
     }
     private void Update()
+    {
+        StateSwitch();
+    }
+
+    private void artificialMovement()
     {
         if (IsFacingLeft)
         {
@@ -38,25 +43,23 @@ public class FrogAI : MonoBehaviour
                 transform.localScale = new Vector2(1, 1);
             }
         }
-        StateSwitch();
-        anim.SetInteger("Animation", (int)currentStates);
-        Debug.Log(currentStates);
-        
     }
+
     private void StateSwitch()
     {
         if (frogBody.velocity.y > 0)
         {
-            currentStates = States.Jumping;
+            currentState = States.Jumping;
         }
         else if (frogBody.velocity.y < 0)
         {
-            currentStates = States.Falling;
+            currentState = States.Falling;
         }
         else
         {
-            currentStates = States.Idle;
+            currentState = States.Idle;
         }
+        anim.SetInteger("Animation", (int)currentState);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -76,10 +79,16 @@ public class FrogAI : MonoBehaviour
             if (IsFacingLeft)
             {
                 IsFacingLeft = false;
+                frogBody.velocity = new Vector2(-speed*2, 10);
+                transform.localScale = new Vector2(1, 1);
+
             }
             else
             {
                 IsFacingLeft = true;
+                frogBody.velocity = new Vector2(speed * 2, 10);
+                transform.localScale = new Vector2(-1, 1);
+
             }
         }
     }
