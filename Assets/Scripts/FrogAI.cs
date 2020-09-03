@@ -15,6 +15,8 @@ public class FrogAI : Enemy
     [SerializeField]
     private LayerMask ground,
                       enemy;
+    [SerializeField]
+    private RigidbodyType2D bestatic;
 
     protected override void Start()
     {
@@ -113,6 +115,8 @@ public class FrogAI : Enemy
     {
         Debug.Log("Died");
         frogBody.velocity = new Vector2(0, 0);
+        coll.isTrigger = true;
+        frogBody.bodyType =  bestatic;
     }
 
 }

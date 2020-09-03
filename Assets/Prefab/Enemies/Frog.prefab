@@ -185,6 +185,7 @@ MonoBehaviour:
   enemy:
     serializedVersion: 2
     m_Bits: 512
+  bestatic: 2
 --- !u!114 &720261643
 MonoBehaviour:
   m_ObjectHideFlags: 0

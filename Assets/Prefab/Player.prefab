@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eea9e9f94c4a7a4c8cc373f4f6ed7ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HurtSound: {fileID: 8300000, guid: a0010a1a0c474473b81729eb770c485f, type: 3}
   ground:
     serializedVersion: 2
     m_Bits: 256

@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     private Collider2D coll;
     private AudioSource sound;
 
+    [SerializeField]
+    private AudioClip HurtSound, RunningSound, CollectSound;
 
     [SerializeField]
     private LayerMask ground;
@@ -58,6 +60,7 @@ public class PlayerController : MonoBehaviour
             Destroy(collision.gameObject);
             cherries++;
             CherryCount.text = cherries.ToString();
+            didCollect();
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
@@ -86,6 +89,9 @@ public class PlayerController : MonoBehaviour
             else
             {
                 currentState = States.Hurt;
+                didHurt();
+                enemyRB.velocity = new Vector2(0, 0);
+                Debug.Log(enemyRB.velocity);
                 if (collision.transform.position.x > transform.position.x)
                 {
                     rb.velocity = new Vector2(-speed, jumpForce / 2);
@@ -160,6 +166,7 @@ public class PlayerController : MonoBehaviour
     }
     private void RunSound()
     {
+        sound.clip = RunningSound;
         if (!sound.isPlaying)
         {
             sound.Play();
@@ -167,6 +174,21 @@ public class PlayerController : MonoBehaviour
     }
     private void FallSound()
     {
+        sound.clip = RunningSound;
+        if (!sound.isPlaying)
+        {
+            sound.Play();
+        }
+    }
+    private void didHurt()
+    {
 
+        sound.clip = HurtSound;
+            sound.Play();
+    }
+    private void didCollect()
+    {
+
+        sound.PlayOneShot(CollectSound, 1f);
     }
 }
