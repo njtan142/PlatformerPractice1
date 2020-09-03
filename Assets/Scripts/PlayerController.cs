@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
     private Collider2D coll;
-
+    private AudioSource sound;
 
 
     [SerializeField]
@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
+        sound = GetComponent<AudioSource>();
         /***********************************************************************/
         /***********************************************************************/
     }
@@ -63,10 +64,21 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            FrogAI frog = collision.gameObject.GetComponent<FrogAI>();
-            if (currentState == States.Falling)
+            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+            Rigidbody2D enemyRB = collision.gameObject.GetComponent<Rigidbody2D>();
+            Debug.Log("Enemy:" + enemyRB.position);
+            Debug.Log("Player:" + rb.position);
+
+            if (currentState == States.Falling && enemyRB.position.y < rb.position.y)
             {
-                frog.JumpedOn();
+                enemy.JumpedOn();
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                enemiesKilled++;
+                EnemiesKilledCount.text = enemiesKilled.ToString();
+            }
+            else if (currentState == States.Jumping && enemyRB.position.y > rb.position.y)
+            {
+                enemy.JumpedOn();
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
                 enemiesKilled++;
                 EnemiesKilledCount.text = enemiesKilled.ToString();
@@ -88,7 +100,8 @@ public class PlayerController : MonoBehaviour
     private void Movement()
     {
         float dy = Input.GetAxis("Horizontal");
-        float dx = Input.GetAxis("Vertical");
+        float dx = Input.GetAxis("Jump");
+        Debug.Log(dx);
         if (dy < 0)
         {
             rb.velocity = new Vector2(-speed, rb.velocity.y);
@@ -99,7 +112,7 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(speed, rb.velocity.y);
             transform.localScale = new Vector2(1, 1);
         }
-        if (dx > 0 && coll.IsTouchingLayers(ground))
+        if (dx == 1 && coll.IsTouchingLayers(ground))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
@@ -129,6 +142,7 @@ public class PlayerController : MonoBehaviour
             else if (rb.velocity.x != 0 && rb.velocity.y == 0)
             {
                 currentState = States.Running;
+                RunSound();
             }
             else if (rb.velocity.y == 0)
             {
@@ -143,5 +157,16 @@ public class PlayerController : MonoBehaviour
             }
         }
         anim.SetInteger("currentState", (int)currentState);
+    }
+    private void RunSound()
+    {
+        if (!sound.isPlaying)
+        {
+            sound.Play();
+        }
+    }
+    private void FallSound()
+    {
+
     }
 }

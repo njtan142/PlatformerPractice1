@@ -2,11 +2,10 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-public class FrogAI : MonoBehaviour
+public class FrogAI : Enemy
 {
     private Rigidbody2D frogBody;
     private Collider2D coll;
-    private Animator anim;
     private enum States { Idle, Jumping, Falling };
     private States currentState = States.Idle;
     [SerializeField]
@@ -17,11 +16,11 @@ public class FrogAI : MonoBehaviour
     private LayerMask ground,
                       enemy;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         frogBody = GetComponent<Rigidbody2D>();
         coll = GetComponent<Collider2D>();
-        anim = GetComponent<Animator>();
     }
     private void Update()
     {
@@ -108,13 +107,12 @@ public class FrogAI : MonoBehaviour
 
             }
         }
+        
     }
-    public void JumpedOn()
+    private void Stop()
     {
-        anim.SetTrigger("Death");
+        Debug.Log("Died");
+        frogBody.velocity = new Vector2(0, 0);
     }
-    public void Death()
-    {
-        Destroy(this.gameObject);
-    }
+
 }
